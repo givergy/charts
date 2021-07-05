@@ -41,6 +41,8 @@ jobs:
         uses: helm/kind-action@v1.2.0
         if: steps.list-changed.outputs.changed == 'true'
         with:
+            config: .ci/kind-config.yaml
+            install_local_path_provisioner: true
             wait: 5m
 
       - name: Run chart-testing (install)
