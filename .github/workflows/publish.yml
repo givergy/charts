@@ -1,7 +1,7 @@
 name: Publish Charts to /docs
 on:
   push:
-    branches: [ master ]
+    branches: [ master, master-givergy ]
 jobs:
   build:
     runs-on: ubuntu-latest
