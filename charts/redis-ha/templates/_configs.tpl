@@ -106,7 +106,7 @@
     identify_master() {
         MASTER="$(sentinel_get_master_retry 3)"
         if [ -z "${MASTER}" ]; then
-            echo "$(date) Error identifying redis master (get-master-addr-by-name) using sentinel ({{ template "redis-ha.fullname" . }}), sentinel group name ({{ template "redis-ha.masterGroupName" . }})."
+            echo "$(date) Error identifying redis master (get-master-addr-by-name) using sentinel ({{ template "redis-ha.fullname" . }}), sentinel group name ({{ template "redis-ha.masterGroupName" . }})"
         fi
     }
 
@@ -686,12 +686,13 @@
     fi
     echo "response=$response"
 
-  cpu_usage=$(top -b -n 1 | grep -v 'grep' | grep 'redis-sentinel' | tr -s ' ' | cut -d ' ' -f 9 | cut -d '%' -f 1)
-  cpu_count=$(cat /proc/cpuinfo | grep -E "processor\s+: \d+" | wc -l)
-  cpu_limit=$((75 / cpu_count))
-  if [ "$cpu_usage" -gt "$cpu_limit" ]; then
-    echo "Sentinel CPU usage is ${cpu_usage}%, over the ${cpu_limit}% limit"
-    exit 2
-  fi
+    cpu_usage=$(top -b -n 1 | grep -v 'grep' | grep 'redis-sentinel' | tr -s ' ' | cut -d ' ' -f 9 | cut -d '%' -f 1)
+    cpu_count=$(cat /proc/cpuinfo | grep -E "processor\s+: \d+" | wc -l)
+    cpu_limit=$((75 / cpu_count))
+
+    if [ "$cpu_usage" -gt "$cpu_limit" ]; then
+        echo "Sentinel CPU usage is ${cpu_usage}%, over the ${cpu_limit}% limit"
+        exit 2
+    fi
 {{- end }}
 
